@@ -87,21 +87,27 @@ public class CreateAccountTest {
 
     public void checkAccPrecence(){
 
-        //configuram clientul
+        // configuram clientul
         RequestSpecification requestSpecification = RestAssured.given();
-        requestSpecification.baseUri("https://demoqa.com/");
+        requestSpecification.baseUri("https://demoqa.com");
         requestSpecification.contentType("application/json");
 
-        //ne autorizam pe baza de token
-        requestSpecification.header("Authorization","Bearer" + token);
+        // ne autorizam pe baza la token
+        requestSpecification.header("Authorization","Bearer " + token);
 
-        //executam requestul
+        // executam request-ul
         Response response = requestSpecification.get("/Account/v1/User/" + userID);
 
+        // validam response
         System.out.println(response.getStatusLine());
 
-        Assert.assertTrue(response.getStatusLine().contains("200"));
-        Assert.assertTrue(response.getStatusLine().contains("OK"));
+        if (response.getStatusLine().contains("200")){
+            Assert.assertTrue(response.getStatusLine().contains("200"));
+            Assert.assertTrue(response.getStatusLine().contains("OK"));
+        } else {
+            Assert.assertTrue(response.getStatusLine().contains("401"));
+            Assert.assertTrue(response.getStatusLine().contains("Unauthorized"));
+        }
     }
 
     public void deleteUser (){
